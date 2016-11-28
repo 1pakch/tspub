@@ -1,0 +1,6 @@
+include_directories (${PROJECT_SOURCE_DIR}/include)
+add_executable(autoindexed_demo autoindexed_demo.cpp)
+add_executable(basic_use_demo basic_use_demo.cpp)
+add_executable(moments1d_demo moments1d_demo.cpp)
+add_executable(cov_demo cov_demo.cpp)
+add_executable(rolling_demo rolling_demo.cpp)
