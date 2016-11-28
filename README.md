@@ -37,12 +37,6 @@ Utilities:
  * `autoindex.hpp` - creating series with automatically generated indices.
  * `sequence.hpp` - a base class for auto-indices.
  * `printing.hpp` - printing operator (`<<`) for series.
-                        
-Demos (dirty code):
- 
- * `test/rolling_tests.cpp` - tests for rolling median and mean
- * `test/series_tests.cpp` - basic tests for series and moments
-
 
 ## Building
 
