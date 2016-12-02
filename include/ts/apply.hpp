@@ -46,7 +46,7 @@ Functor apply_values(const Container& container, Functor f=Functor())
   auto guarded_f = na::na_guard<V, Functor, na_guard>(std::move(f));
   // apply the (possibly na-guarded) functor
   for (auto v: values) { guarded_f(v); }
-  // take the functor out of the guard as an rvalue
+  // take the functor out of the guard
   return guarded_f.argument();
 }
 
@@ -63,7 +63,7 @@ Functor apply_pairs(const Series& x, Functor f=Functor())
   for (auto c = x.begin_paired(); c != x.end_paired(); ++c) {
     guarded_f(c.index(), c.value());
   }
-  // take the functor out ouf the guard as an rvalue
+  // take the functor out ouf the guard
   return guarded_f.argument();
 }
 
