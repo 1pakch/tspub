@@ -57,15 +57,15 @@ void print(std::ostream& s,
   typedef Series<Timestamp, Value> S;
   auto p = impl::SeriesPrinter<S>(settings);
   //auto mergeitr = col.merge_iterator();
-  auto mergeitr = MergeIterator<S>::from_pointers(pseries);
+  auto mergeitr = MergeIterator<S>::from_series_ptrs(pseries);
   const int N = mergeitr.n_series();
   typename S::timestamp_type curind;
   std::map<int, typename S::value_type> vals;
 
   p.print_header(s, N);
   // the main loop over the values
-  if (!mergeitr.at_end()) curind = mergeitr.timestamp();
-  while (!mergeitr.at_end())
+  if (!mergeitr) curind = mergeitr.timestamp();
+  while (mergeitr)
   {
     if (curind != mergeitr.timestamp()) {
       // print all the values collected for the previous index

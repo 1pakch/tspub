@@ -45,12 +45,12 @@ class MergeIterator
   }
 
   /// Creates a merge iterator from a collection of pointers to Series.
-  template<class PtrCollection>
-  static auto from_pointers(const PtrCollection& col) -> decltype(auto)
+  template<class SeriesPtrs>
+  static auto from_series_ptrs(const SeriesPtrs& ptrs) -> decltype(auto)
   {
     std::vector<itr_type> begins;
     std::vector<itr_type> ends;
-    for (auto& s: col) {
+    for (auto& s: ptrs) {
       begins.emplace_back(s->begin_paired());
       ends.emplace_back(s->end_paired());
     }
@@ -75,6 +75,9 @@ class MergeIterator
 
   /// Are there observations left?
   bool at_end() const { return cur_ == -1; }
+
+  /// Conversion to bool for easy while loops.
+  operator bool() const { return !at_end(); }
 
   /// Number of input series.
   size_t n_series() const { return itrs_.size(); }
