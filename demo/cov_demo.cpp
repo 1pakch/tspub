@@ -1,30 +1,16 @@
-#include <iostream>
-#include <vector>
-#include <typeinfo>
-#include <limits>
-
 #include <ts/series.hpp>
 #include <ts/printing.hpp>
 #include <ts/moments.hpp>
 
 #include "print.hpp"
+#include "catch.hpp"
+
 
 using namespace std;
 using namespace ts;
 using namespace ts::printing;
 using namespace ts::moments;
 
-
-template<typename Exception>
-void catch_(void(*f)())
-{
-  try {
-    f();
-  } catch (const Exception& e) {
-    std::cout << "Caught an " << typeid(e).name()
-              << ": " << e.what() << std::endl;
-  }
-}
 
 int main()
 {  

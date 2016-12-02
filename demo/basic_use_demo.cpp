@@ -1,5 +1,3 @@
-#include <vector>
-
 #include <ts/series.hpp>
 #include <ts/printing.hpp>
 

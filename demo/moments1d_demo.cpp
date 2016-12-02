@@ -1,13 +1,12 @@
-#include <vector>
-
 #include <ts/series.hpp>
-#include <ts/moments.hpp>
 #include <ts/autoindex.hpp>
+#include <ts/moments.hpp>
 #include <ts/printing.hpp>
 #include <ts/na.hpp>
 
 #include "print.hpp"
 #include "catch.hpp"
+
 
 using namespace std;
 using namespace ts;

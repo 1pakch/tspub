@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <ts/series.hpp>
 #include <ts/na.hpp>
 #include <ts/autoindex.hpp>

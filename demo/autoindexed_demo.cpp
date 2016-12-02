@@ -1,18 +1,14 @@
 #include <ts/series.hpp>
 #include <ts/autoindex.hpp>
+#include <ts/printing.hpp>
 
 #include "print.hpp"
 
 
 using namespace std;
 using namespace ts;
+using namespace ts::printing;
 
-
-template<typename Series>
-void print(const Series& s)
-{
-  std::cout << s.to_string() << std::endl;
-}
 
 int main()
 {
