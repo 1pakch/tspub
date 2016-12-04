@@ -7,12 +7,11 @@
 #include <algorithm>
 #include <cmath>
 
-#include <ts/series.hpp>
-#include <ts/autoindex.hpp>
-#include <ts/accumulator.hpp>
-#include <ts/apply.hpp>
-#include <ts/filters.hpp>
+#include <ts/ts.hpp>
+#include <ts/printing.hpp>
+
 #include "testutils.hpp"
+
 
 using namespace ts;
 using namespace ts::filters;
@@ -45,7 +44,7 @@ class RollingTest
   {
     auto rm = RollingMean(width);
     auto acc = Accumulator<RollingMean, int>(rm);
-    auto ma = apply_pairs(s, acc).value();
+    auto ma = s.apply_pairs(acc).value();
     compare_index(ma, __func__);
     compare_values(ma, __func__);
   }
@@ -54,7 +53,7 @@ class RollingTest
   {
     auto rm = RollingMedian<double>(width);
     auto acc = Accumulator<RollingMedian<double>, int>(rm);
-    auto ma = apply_pairs(s, acc).value();
+    auto ma = s.apply_pairs(acc).value();
     compare_index(ma, __func__);
     compare_values(ma, __func__);
   }

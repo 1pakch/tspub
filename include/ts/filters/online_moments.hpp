@@ -43,7 +43,11 @@ class OnlineMean: public DeterministicallyValidFilter
   {}  
 
   /// Returns the current estimate
-  double value() const { return mu_; }
+  double value() const {
+    return (
+      DeterministicallyValidFilter::ready() >= 1 ? mu_ : na::na<double>()
+    );
+  }
 
   /// Processes the next value
   double operator() (double x)
@@ -126,11 +130,11 @@ class OnlineCovUnknownMeans: public DeterministicallyValidFilter
   {}
 
   /// current estimate of the covariance
-  double value() const
+  double cov() const
   {
     return M12_/ impl::secondMomentDenominator(n_processed(), true);
   }
-
+ 
   /// current estimate of the variance of the first input
   double var1() const
   {
@@ -228,7 +232,7 @@ class OnlineCovKnownMeans: public DeterministicallyValidFilter
   {}
 
   /// current estimate of the covariance
-  double value() const
+  double cov() const
   {
     return M12_/ impl::secondMomentDenominator(n_processed(), false);
   }

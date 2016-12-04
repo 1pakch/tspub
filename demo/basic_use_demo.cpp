@@ -1,4 +1,4 @@
-#include <ts/series.hpp>
+#include <ts/ts.hpp>
 #include <ts/printing.hpp>
 
 #include "print.hpp"

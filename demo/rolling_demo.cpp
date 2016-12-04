@@ -1,10 +1,5 @@
-#include <ts/series.hpp>
-#include <ts/na.hpp>
-#include <ts/autoindex.hpp>
-#include <ts/apply.hpp>
-#include <ts/accumulator.hpp>
+#include <ts/ts.hpp>
 #include <ts/printing.hpp>
-#include <ts/filters.hpp>
 
 #include "print.hpp"
 
@@ -23,27 +18,31 @@ int main()
   x[2] = 1;
   x[3] = na::na<double>();
   x[4] = 1;
-  print( "x =", x );
 
   {
     auto rm = RollingMean(3);
     // Accumulator is a functor that wraps a filter and
     // stores the output in a Series when called
-    auto acc = Accumulator<RollingMean, int>(rm);
+    auto acc1 = Accumulator<RollingMean, int>(rm);
+    auto acc2 = Accumulator<RollingMean, int>(rm);
     // Calls the acc functor on each (index, value) pair
-    auto y = apply_pairs(x, acc).value();
+    auto y1 = x.apply_pairs(acc1).value();
+    auto y2 = x.apply_pairs(acc2, false).value(); // do not skip NA inputs
 
     print(" -- RollingMean(3) -- " );
-    print( y );
+    print( std::cout, {&x, &y1, &y2} );
   }
-  
+
+
   {
     auto rm = RollingMedian<double>(3);
-    auto acc = Accumulator<RollingMedian<double>, int>(rm);
-    auto y = apply_pairs(x, acc).value();
+    auto acc1 = Accumulator<RollingMedian<double>, int>(rm);
+    auto acc2 = Accumulator<RollingMedian<double>, int>(rm);
+    auto y1 = x.apply_pairs(acc1).value();
+    auto y2 = x.apply_pairs(acc2, false).value();
 
     print(" -- RollingMedian<double>(3) --" );
-    print("y =", y );
+    print( std::cout, {&x, &y1, &y2} );
   }
 
   return 0;

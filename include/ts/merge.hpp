@@ -13,7 +13,7 @@
 namespace ts {
 
 
-/// Merges series on their timestamps.
+/// Merges series on their timestamps. Not an iterator in strict C++ sense.
 template<typename Series>
 class MergeIterator
 {

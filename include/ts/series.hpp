@@ -10,8 +10,9 @@
 #include <sstream>
 #include <algorithm>
 
-#include "exceptions.hpp"
-#include "sequence.hpp"
+#include <ts/exceptions.hpp>
+#include <ts/na.hpp>
+#include <ts/filters.hpp>
 
 
 namespace ts {
@@ -83,7 +84,7 @@ struct IndexValueIter: public std::pair<Itr1, Itr2>
 ///
 template<typename Timestamp, typename Value=double>
 class Series{
- public: // declarations
+ public: // declarations and consts
 
   typedef Series<Timestamp, Value> this_type;
   typedef Timestamp timestamp_type;
@@ -152,6 +153,84 @@ class Series{
   
   /// Convert to a human-readable string
   std::string to_string(std::string sep=std::string(", ")) const;
+
+  /// Apply a functor to values (NAs impossible).
+  template<typename Functor>
+  typename std::enable_if<!na::can_na<Value>(), Functor&>::type
+  apply_values(Functor& f) const
+  {
+    for (auto v: valuesView()) { f(v); }
+    return f;
+  }
+
+  /// Apply a functor to index, value pairs (NA values impossible).
+  template<typename Functor>
+  typename std::enable_if<!na::can_na<Value>(), Functor&>::type
+  apply_pairs(Functor& f) const
+  {
+    for (auto c = begin_paired(); c != end_paired(); ++c) {
+      f(c.index(), c.value());
+    }
+    return f;
+  }
+
+  /// Apply a functor to values (NAs possible).
+  template<typename Functor>
+  typename std::enable_if<na::can_na<Value>(), Functor&>::type
+  apply_values(Functor& f, bool skip_na=true) const
+  {
+    if (skip_na) {
+      for (auto v: valuesView()) {
+        if (na::is_na(v)) continue;
+        f(v);
+      }
+    } else {
+      for (auto v: valuesView()) { f(v); }
+    }
+    return f;
+  }
+
+  /// Apply a functor to index, value pairs (NA values possible).
+  template<typename Functor>
+  typename std::enable_if<na::can_na<Value>(), Functor&>::type
+  apply_pairs(Functor& f, bool skip_na=true) const
+  {
+    if (skip_na) {
+      for (auto c = begin_paired(); c != end_paired(); ++c) {
+        if (na::is_na(c.value())) continue;
+        f(c.index(), c.value());
+      }
+    } else {
+      for (auto c = begin_paired(); c != end_paired(); ++c) {
+        f(c.index(), c.value());
+      }
+    }
+    return f;
+  }
+
+  /// The mean of the series.
+  double mean() const
+  {
+    auto est = filters::OnlineMean();
+    apply_values( est );
+    return est.value();
+  }
+
+  /// The variance using a one-pass algorithm.
+  double var() const
+  {
+    auto est = filters::OnlineVarUnknownMean();
+    apply_values( est );
+    return est.value();
+  }
+
+  /// The variance assuming the mean is known.
+  double var(double mean) const
+  {
+    auto est = filters::OnlineVarKnownMean(mean);
+    apply_values( est );
+    return est.value();
+  }
 
 private: // methods
 

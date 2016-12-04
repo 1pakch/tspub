@@ -12,7 +12,10 @@ namespace ts {
 struct Sum
 {
   Sum(): val(na::na<double>()) {}
-  void operator() (double x){ val = na::is_na<double>(val) ? x : val + x; }
+  void operator() (double x){
+    if (na::is_na<double>(x)) return;
+    val = na::is_na<double>(val) ? x : val + x;
+  }
   double value() const { return val; }
  private:
   double val;
@@ -22,7 +25,10 @@ struct Sum
 struct Last
 {
   Last(): val(na::na<double>()) {}
-  void operator() (double x){ val = x; }
+  void operator() (double x){
+    if (na::is_na<double>(x)) return;
+    val = x;
+  }
   double value() const { return val; }
  private:
   double val;
@@ -32,7 +38,10 @@ struct Last
 struct First
 {
   First(): val(na::na<double>()) {}
-  void operator() (double x){ val = na::is_na<double>(val) ? x : val; }
+  void operator() (double x) {
+    if (na::is_na<double>(x)) return;
+    val = na::is_na<double>(val) ? x : val;
+  }
   double value() const { return val; }
  private:
   double val;

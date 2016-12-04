@@ -23,7 +23,7 @@ class Accumulator
     : filter(filter)
   {}
 
-  // Process the series
+  /// Process the series. The behavior can be further parametrized if necessary.
   void operator() (Timestamp t, input_type v)
   {
     // update the filter if the input is not NA

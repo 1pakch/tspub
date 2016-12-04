@@ -8,6 +8,7 @@
 #include <ios>
 #include <initializer_list>
 
+#include <ts/sequence.hpp>
 #include <ts/merge.hpp>
 
 
@@ -30,7 +31,7 @@ struct SeriesPrintSettings
 {
   const int index_width = 4;
   
-  const int values_width = 4;
+  const int values_width = 10;
   
   const std::string index_value_sep = std::string(" | ");
 
@@ -64,7 +65,7 @@ void print(std::ostream& s,
 
   p.print_header(s, N);
   // the main loop over the values
-  if (!mergeitr) curind = mergeitr.timestamp();
+  if (mergeitr) curind = mergeitr.timestamp();
   while (mergeitr)
   {
     if (curind != mergeitr.timestamp()) {

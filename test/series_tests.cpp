@@ -22,10 +22,10 @@
 #include <algorithm>
 #include <cmath>
 
-#include <ts/series.hpp>
-#include <ts/autoindex.hpp>
-#include <ts/moments.hpp>
+#include <ts/ts.hpp>
+
 #include "testutils.hpp"
+
 
 using namespace ts;
 using namespace testutils;
@@ -141,7 +141,7 @@ void test_mean(int count)
 {
   auto s = AutoIndex<int>(1).zipValues(Sequence<int>(1).take(count));
   auto expectedMean = double(count + 1) / 2;
-  Assert::almost_equal(moments::mean(s), expectedMean,
+  Assert::almost_equal(s.mean(), expectedMean,
                        "incorrect mean", __func__);
 }
 
@@ -152,7 +152,7 @@ void test_var_known_mean(int count)
   auto s = AutoIndex<int>(1).zipValues(Sequence<int>(1).take(count));
   double knownMean = 0;
   auto expectedVar = double(sum_of_squares(count)) / count;
-  auto computedVar = moments::var(s, knownMean);
+  auto computedVar = s.var(knownMean);
   Assert::almost_equal(computedVar, expectedVar, "wrong variance", __func__);
 }
 
@@ -162,8 +162,8 @@ void test_var_estimated_mean()
 {
   int count = 5;
   auto s = AutoIndex<int>(1).zipValues(Sequence<int>(1).take(count));
-  auto expectedVar = double(4 + 1 + 0 + 1 + 4) / count;
-  auto computedVar = moments::var(s);
+  auto expectedVar = double(4 + 1 + 0 + 1 + 4) / (count - 1);
+  auto computedVar = s.var();
   Assert::almost_equal(computedVar, expectedVar, "wrong variance", __func__);
 }
 
@@ -173,9 +173,9 @@ void test_cov_known_means()
 {
   auto s1 = AutoIndex<int>().zipValues({0.1, 0.5, 0.4, 0.2});
   auto s2 = AutoIndex<int>().zipValues({0.4, -0.8, 1.0, 0.0});
-  double cov = moments::cov(s1, s2, 0, 0);
+  double cov_ = cov(s1, s2, 0, 0);
   double expcov = 0.01;
-  Assert::almost_equal(cov, expcov , "wrong covariance", __func__);
+  Assert::almost_equal(cov_, expcov , "wrong covariance", __func__);
 }
 
 // Test the cov() method
@@ -183,9 +183,9 @@ void test_cov_estimated_means()
 {
   auto s1 = AutoIndex<int>().zipValues({0.1, 0.5, 0.4, 0.2});
   auto s2 = AutoIndex<int>().zipValues({0.4, -0.8, 1.0, 0.0});
-  double cov = moments::cov(s1, s2);
+  double cov_ = cov(s1, s2);
   double expcov = -0.04666666666666;
-  Assert::almost_equal(cov, expcov, "wrong covariance", __func__);
+  Assert::almost_equal(cov_, expcov, "wrong covariance", __func__);
 }
 
 

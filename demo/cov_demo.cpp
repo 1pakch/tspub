@@ -1,6 +1,5 @@
-#include <ts/series.hpp>
+#include <ts/ts.hpp>
 #include <ts/printing.hpp>
-#include <ts/moments.hpp>
 
 #include "print.hpp"
 #include "catch.hpp"
@@ -9,7 +8,6 @@
 using namespace std;
 using namespace ts;
 using namespace ts::printing;
-using namespace ts::moments;
 
 
 int main()
