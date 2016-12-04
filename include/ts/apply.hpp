@@ -43,11 +43,13 @@ Functor apply_values(const Container& container, Functor f=Functor())
   using V = typename decltype(values)::value_type;
   // wrapper around the f functor which optionally skips the NA
   // values if supported by the value type and na_guard == true
-  auto guarded_f = na::na_guard<V, Functor, na_guard>(std::move(f));
+  auto guarded_f = na::na_guard<V, Functor, na_guard>(
+      std::forward<Functor>(f)
+  );
   // apply the (possibly na-guarded) functor
   for (auto v: values) { guarded_f(v); }
   // take the functor out of the guard
-  return guarded_f.argument();
+  return guarded_f.extract_argument();
 }
 
 /// Call a functor on index-value pairs optinally skipping NA elements.
@@ -58,13 +60,15 @@ Functor apply_pairs(const Series& x, Functor f=Functor())
   using V = typename Series::value_type;
   // wrapper around the f functor which optionally skips the NA
   // values if supported by the value type and na_guard == true
-  auto guarded_f = na::na_guard<V, Functor, na_guard>(std::move(f));
+  auto guarded_f = na::na_guard<V, Functor, na_guard>(
+      std::forward<Functor>(f)
+  );
   // apply the (possibly na-guarded) functor on all entries
   for (auto c = x.begin_paired(); c != x.end_paired(); ++c) {
     guarded_f(c.index(), c.value());
   }
   // take the functor out ouf the guard
-  return guarded_f.argument();
+  return guarded_f.extract_argument();
 }
 
 
@@ -81,7 +85,7 @@ Functor apply2(const Series& x, const Series& y, Functor f=Functor())
   auto cy = y.begin_paired(), yend = y.end_paired();
   
   // Return if one of the series is empty
-  if (cx == xend || cy == yend) { return std::move(f); }
+  if (cx == xend || cy == yend) { return std::forward<Functor>(f); }
   
   // Construct the aggregators and push the first values
   using V = typename Series::value_type;

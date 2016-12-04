@@ -64,8 +64,7 @@ struct na_guard_base
  public:
 
   na_guard_base(){}
-  na_guard_base(F& f): f(f) {}
-  na_guard_base(F&& f_): f(std::move(f_)) {}
+  na_guard_base(F f): f(std::forward<F>(f)) {}
 
   //auto value() const -> decltype(auto) { return f.value(); } 
   const F& argument() const { return f; }

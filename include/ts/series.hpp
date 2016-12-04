@@ -105,18 +105,9 @@ class Series{
   Series(){};
 
   /// Creates a Series from index and value vectors
-  Series(const index_type& index_, const values_type& values_):
-    index(index_),
-    values(values_)
-  {
-    post_construction_checks();
-  }
-
-  /// Creates a Series from temp index and value vectors or init lists.
-  Series(index_type&& index_, values_type&& values_):
-    // not having underscores in parameter names does not work
-    index(std::move(index_)),
-    values(std::move(values_))
+  Series(index_type index_, values_type values_):
+    index(std::forward<index_type>(index_)),
+    values(std::forward<values_type>(values_))
   {
     post_construction_checks();
   }

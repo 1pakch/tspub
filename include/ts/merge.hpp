@@ -36,10 +36,10 @@ class MergeIterator
 
  public:
 
-  MergeIterator(std::vector<itr_type>&& itrs,
-                std::vector<itr_type>&& ends)
-    : itrs_(std::move(itrs)),
-      ends_(std::move(ends))
+  MergeIterator(std::vector<itr_type> itrs,
+                std::vector<itr_type> ends)
+    : itrs_(std::forward< std::vector<itr_type> >(itrs)),
+      ends_(std::forward< std::vector<itr_type> >(ends))
   {
     set_current();
   }
