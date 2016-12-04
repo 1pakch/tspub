@@ -40,7 +40,8 @@ Utilities:
 
  * `autoindex.hpp` - creating series with automatically generated indices.
  * `sequence.hpp` - a base class for auto-indices.
- * `printing.hpp` - printing operator (`<<`) for series and .
+ * `printing.hpp` - printing operator (`<<`) for single series and columnar
+        merging print for multiple series.
 
 ## Building
 
