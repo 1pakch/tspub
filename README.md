@@ -1,11 +1,19 @@
 # ts library
+A basic library for manipulating sorted time series implemented in modern C++.
+The design intends to allow for generic types in indices and values as well as
+to provide basic support for NA values. The storage is columnar meaning that
+indices and values are stored in separate contiguous containers (the
+alternative would be to store indices and the correspnding values as
+tuples).
+
 ## Overview
 The library is header-only. The directory structure is the following
 
  * `include/ts` - the library itself
  * `demo` - demo programs
  * `test` - test programs (dirty code, used for regressions. In principle
-    should be written with a proper unit testing framework)
+    should be written with a proper unit testing framework but not to use
+    them was a requirement).
 
 ## Library Structure
 
